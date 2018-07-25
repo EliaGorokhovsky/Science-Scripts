@@ -91,9 +91,9 @@ for (ensembleSize, filterKind, inflation, localization, assimilatedVars) in iter
     #Print results
     runNumber += 1
     print("With preassim.nc: concentration RMSE is " + str(results[0]) + ", concentration spread is " + str(results[1])
-          + "wind RMSE is " + str(results[2]) + ", wind spread is " + str(results[3])
+          + ", wind RMSE is " + str(results[2]) + ", wind spread is " + str(results[3])
           + "\nWith analysis.nc: concentration RMSE is " + str(results[4]) + ", concentration spread is " + str(results[5])
-          + "wind RMSE is " + str(results[6]) + ", wind spread is " + str(results[7])
+          + ", wind RMSE is " + str(results[6]) + ", wind spread is " + str(results[7])
           + "\n\n Runs done: " + str(runNumber) + " / " + str(numRuns) + "\n")
     #Write data
     with open(datafile, "a") as data:
