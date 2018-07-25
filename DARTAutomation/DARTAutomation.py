@@ -18,7 +18,7 @@ def writeNamelist(path):
     #This is currently done by removing the file and creating a new one,
     #which could damage the namelist - use carefully
     #TODO: find a safer way to write namelists
-    os.remove(path)
+    subprocess.call(["rm", "input.nml"], cwd=workPath)
     namelist.write(path)
     subprocess.call(["rm", ".input.nml.swp"], cwd=workPath)
 
@@ -62,7 +62,10 @@ subprocess.call("./perfect_model_obs", cwd=workPath)
 
 #Write table headers
 with open(datafile, "a") as data:
-    data.write("Ensemble Size, Filter Kind, Inflation, Localization Cutoff, Assimilated Variables, Diagnostic File, Concentration RMSE, Concentration Spread, Wind RMSE, Wind Spread")
+    data.write("Ensemble Size, Filter Kind, Inflation, Localization Cutoff, Assimilated Variables, Diagnostic File, Concentration RMSE, Concentration Spread, Wind RMSE, Wind Spread\n")
+
+numRuns = len(ensembleSizes) * len(filterKinds) * len(inflations) * len(localizations) * len(assimilatedVarSets)
+runNumber = 0
 
 #Iterate through all combinations of run parameters
 for (ensembleSize, filterKind, inflation, localization, assimilatedVars) in itertools.product(ensembleSizes, filterKinds, inflations, localizations, assimilatedVarSets):
@@ -85,6 +88,13 @@ for (ensembleSize, filterKind, inflation, localization, assimilatedVars) in iter
     #This analysis is specific to the experiment
     with open(workPath + "rms_spread_case", "r") as resultsfile:
         results = resultsfile.read().replace(" ", "").split(",")[:-1]
+    #Print results
+    runNumber += 1
+    print("With preassim.nc: concentration RMSE is " + str(results[0]) + ", concentration spread is " + str(results[1])
+          + "wind RMSE is " + str(results[2]) + ", wind spread is " + str(results[3])
+          + "\nWith analysis.nc: concentration RMSE is " + str(results[4]) + ", concentration spread is " + str(results[5])
+          + "wind RMSE is " + str(results[6]) + ", wind spread is " + str(results[7])
+          + "\n\n Runs done: " + str(runNumber) + " / " + str(numRuns) + "\n")
     #Write data
     with open(datafile, "a") as data:
         data.write(",".join(
@@ -92,9 +102,9 @@ for (ensembleSize, filterKind, inflation, localization, assimilatedVars) in iter
             str(filterKind), 
             str(inflation), 
             str(localization), 
-            assimilatedVars.replace(",", " and "), 
+            str(assimilatedVars).replace(",", " and"), 
             "preassim.nc", 
-            results[0], results[1], results[2], results[3]]
+            results[0], results[1], results[2], results[3], "\n"]
             )
         )
         data.write(",".join(
@@ -102,9 +112,9 @@ for (ensembleSize, filterKind, inflation, localization, assimilatedVars) in iter
             str(filterKind), 
             str(inflation), 
             str(localization), 
-            assimilatedVars.replace(",", " and "), 
+            str(assimilatedVars).replace(",", " and"), 
             "analysis.nc", 
-            results[4], results[5], results[6], results[7]]
+            results[4], results[5], results[6], results[7], "\n"]
             )
         )
 
