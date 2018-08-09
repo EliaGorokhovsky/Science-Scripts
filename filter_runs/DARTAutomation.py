@@ -46,7 +46,7 @@ filterNames = {8 : "RHF"}
 filterKinds = [8]
 
 #The list of inflation standard deviations to check
-inflations = [1.0, 1.02, 1.04, 1.08, 1.16, 1.32, 1.64]
+inflations = [0.98, 0.99]
 
 #The list of possible localization halfwidths to check
 localizations = [.125, .15, .175, .2, .25, .4, 1000000]
@@ -94,7 +94,7 @@ for (ensembleSize, filterKind, inflation, localization, assimilatedVars) in iter
           + ", wind RMSE is " + str(results[2]) + ", wind spread is " + str(results[3])
           + "\nWith analysis.nc: concentration RMSE is " + str(results[4]) + ", concentration spread is " + str(results[5])
           + ", wind RMSE is " + str(results[6]) + ", wind spread is " + str(results[7])
-          + "\n\n Runs done: " + str(runNumber) + " / " + str(numRuns) + "\n")
+          + "\n\nRuns done: " + str(runNumber) + " / " + str(numRuns) + "\n")
     #Write data
     with open(datafile, "a") as data:
         data.write(",".join(
